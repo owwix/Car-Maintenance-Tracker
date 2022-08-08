@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
+import javafx.collections.*;
 
 /**
  *
@@ -34,18 +35,29 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private ChoiceBox<String> removeChoiceBox;
     
+    ObservableList<String> types = FXCollections.observableArrayList(datasource.getMaintenanceTypesAsArray());
+    
+    
     @FXML
     public void onAddButtonClicked(ActionEvent event) {
         String field = addTypeField.getText();
         datasource.updateTypes(field);
+        if (field.equals("") || types.contains(field)) {
+            return;
+        }
+        
+        types.add(field);
     }
     
     @FXML
     public void onRemoveButtonClicked(ActionEvent event) {
         String field = removeChoiceBox.getValue();
         datasource.removeTypes(field);
-        removeChoiceBox.getItems().removeAll();
-        removeChoiceBox.getItems().addAll(typeArray);
+        if (field.equals("")) {
+            return;
+        }
+        
+        types.remove(field);
     }
     
     private String typeArray[] = datasource.getMaintenanceTypesAsArray();
@@ -53,12 +65,19 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        typeChoiceBox.getItems().addAll(typeArray);
+        typeChoiceBox.setItems(types);
         typeChoiceBox.setValue(typeArray[0]);
-        logChoiceBox.getItems().addAll(typeArray);
+        logChoiceBox.setItems(types);
         logChoiceBox.setValue(typeArray[0]);
-        removeChoiceBox.getItems().addAll(typeArray);
+        removeChoiceBox.setItems(types);
         removeChoiceBox.setValue(typeArray[0]);
-    }    
+    }  
     
+    public ObservableList<String> getTypes() {
+        return types;
+    }
+    
+    public void setTypes(ObservableList<String> types) {
+        this.types=types;
+    }
 }
