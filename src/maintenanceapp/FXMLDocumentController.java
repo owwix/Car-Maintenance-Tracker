@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
 
 /**
@@ -19,7 +19,11 @@ import javafx.scene.control.Label;
  * @author alexanderokonkwo
  */
 public class FXMLDocumentController implements Initializable {
+    
     Datasource datasource = new Datasource();
+    
+    @FXML
+    private TextField addTypeField;
     
     @FXML
     private ChoiceBox<String> typeChoiceBox;
@@ -27,7 +31,22 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private ChoiceBox<String> logChoiceBox;
     
-//    private String typeArray[] = {"Oil", "Spark Plugs","Transmission Fluid"};
+    @FXML
+    private ChoiceBox<String> removeChoiceBox;
+    
+    @FXML
+    public void onAddButtonClicked(ActionEvent event) {
+        String field = addTypeField.getText();
+        datasource.updateTypes(field);
+    }
+    
+    @FXML
+    public void onRemoveButtonClicked(ActionEvent event) {
+        String field = removeChoiceBox.getValue();
+        datasource.removeTypes(field);
+        removeChoiceBox.getItems().removeAll();
+        removeChoiceBox.getItems().addAll(typeArray);
+    }
     
     private String typeArray[] = datasource.getMaintenanceTypesAsArray();
     
@@ -38,6 +57,8 @@ public class FXMLDocumentController implements Initializable {
         typeChoiceBox.setValue(typeArray[0]);
         logChoiceBox.getItems().addAll(typeArray);
         logChoiceBox.setValue(typeArray[0]);
+        removeChoiceBox.getItems().addAll(typeArray);
+        removeChoiceBox.setValue(typeArray[0]);
     }    
     
 }

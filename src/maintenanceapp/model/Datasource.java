@@ -53,13 +53,10 @@ public class Datasource {
     }
     
     public String[] getMaintenanceTypesAsArray() {
-        Statement statement = null;
-        ResultSet results = null;
         
-        try {
-            conn = DriverManager.getConnection(CONNECTION_STRING);
-            statement = conn.createStatement();
-            results = statement.executeQuery("SELECT * FROM " + TABLE_MAINTENANCETYPE);
+        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+            Statement statement = conn.createStatement();
+            ResultSet results = statement.executeQuery("SELECT * FROM " + TABLE_MAINTENANCETYPE);){
                     
             List<MaintenanceType> types = new ArrayList<>();
             while(results.next()){
@@ -79,22 +76,32 @@ public class Datasource {
         } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
             return null;
-        } finally {
-            try {
-                if(results!=null) {
-                    results.close();
-                }
-            } catch(SQLException e) {
-                System.out.println("Error closing ResultSet: " + e.getMessage());
-            }
-            try {
-                if(statement!=null){
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Error closing statement: " + e.getMessage());
-        }
-        }
+        } 
+    }
+    
+    public void updateTypes(String addedType) {
+        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+            Statement statement = conn.createStatement();) {
+            
+            statement.executeQuery(String.format("INSERT INTO %s (Type) VALUES ('%s')", TABLE_MAINTENANCETYPE, addedType));
+            System.out.println("Add successful");
+        } catch (SQLException e) {
+            System.out.println("Query failed: " + e.getMessage());
+
+        } 
+ 
+    }
+    
+    public void removeTypes(String removedType) {
+        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+            Statement statement = conn.createStatement();) {
+            
+            statement.executeQuery(String.format("DELETE FROM %s WHERE Type='%s'", TABLE_MAINTENANCETYPE, removedType));
+            System.out.println("Remove successful");
+        } catch (SQLException e) {
+            System.out.println("Query failed: " + e.getMessage());
+
+        } 
     }
     
     public int getNumOfTypes() throws SQLException{
