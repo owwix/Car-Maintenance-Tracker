@@ -52,12 +52,15 @@ public class Datasource {
         }
     }
     
-    public List<MaintenanceType> queryType() {
-
-        try (Statement statement = conn.createStatement();
-             ResultSet results = statement.executeQuery("SELECT * FROM " + TABLE_MAINTENANCETYPE)){
-
-            
+    public String[] getMaintenanceTypesAsArray() {
+        Statement statement = null;
+        ResultSet results = null;
+        
+        try {
+            conn = DriverManager.getConnection(CONNECTION_STRING);
+            statement = conn.createStatement();
+            results = statement.executeQuery("SELECT * FROM " + TABLE_MAINTENANCETYPE);
+                    
             List<MaintenanceType> types = new ArrayList<>();
             while(results.next()){
                 MaintenanceType type = new MaintenanceType();
@@ -66,12 +69,32 @@ public class Datasource {
                 
             }
             
-            return types;
+            String typesArray[];
+            typesArray = new String[types.size()];
+            for (int i = 0; i < types.size(); i++){
+                typesArray[i] = types.get(i).getType();
+            }            
             
+        return typesArray;
         } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
             return null;
-        } 
+        } finally {
+            try {
+                if(results!=null) {
+                    results.close();
+                }
+            } catch(SQLException e) {
+                System.out.println("Error closing ResultSet: " + e.getMessage());
+            }
+            try {
+                if(statement!=null){
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error closing statement: " + e.getMessage());
+        }
+        }
     }
     
     public int getNumOfTypes() throws SQLException{

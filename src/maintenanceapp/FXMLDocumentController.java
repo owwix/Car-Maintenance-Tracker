@@ -19,16 +19,25 @@ import javafx.scene.control.Label;
  * @author alexanderokonkwo
  */
 public class FXMLDocumentController implements Initializable {
-        
+    Datasource datasource = new Datasource();
+    
     @FXML
     private ChoiceBox<String> typeChoiceBox;
     
-    private String typeArray[] = {"Oil", "Spark Plugs","Transmission Fluid"};
+    @FXML
+    private ChoiceBox<String> logChoiceBox;
+    
+//    private String typeArray[] = {"Oil", "Spark Plugs","Transmission Fluid"};
+    
+    private String typeArray[] = datasource.getMaintenanceTypesAsArray();
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         typeChoiceBox.getItems().addAll(typeArray);
-        System.out.println("yeet");
+        typeChoiceBox.setValue(typeArray[0]);
+        logChoiceBox.getItems().addAll(typeArray);
+        logChoiceBox.setValue(typeArray[0]);
     }    
     
 }
