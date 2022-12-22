@@ -11,6 +11,7 @@ package maintenanceapp.model;
 public class MaintenanceType {
     
     private String type;
+    private String mainID;
 
     /**
      * @return the type
@@ -24,6 +25,20 @@ public class MaintenanceType {
      */
     public void setType(String type) {
         this.type = type;
+    }
+
+    /**
+     * @return the mainID
+     */
+    public String getMainID() {
+        return mainID;
+    }
+
+    /**
+     * @param mainID the mainID to set
+     */
+    public void setMainID(String mainID) {
+        this.mainID = mainID;
     }
     
 }

@@ -9,6 +9,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.*;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -27,8 +28,15 @@ public class Datasource {
     
     public static final String TABLE_MAINTENANCETYPE = "MaintenanceType";
     public static final String COLUMN_TYPE = "Type";
+    public static final String COLUMN_MAINID = "MainId";
+    
+    private DateTimeFormatter formatter;
     
     private Connection conn;
+    
+    public Datasource() {
+        formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    }
     
     public boolean open(){
         try {
@@ -62,6 +70,7 @@ public class Datasource {
             while(results.next()){
                 MaintenanceType type = new MaintenanceType();
                 type.setType(results.getString(COLUMN_TYPE));
+                type.setMainID(results.getString(COLUMN_MAINID));
                 types.add(type);
                 
             }
@@ -79,11 +88,46 @@ public class Datasource {
         } 
     }
     
+//    public String getMaintenanceID(String maintenanceType) {
+//        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+//            Statement statement = conn.createStatement();
+//            ResultSet results = statement.executeQuery("SELECT * FROM " + TABLE_MAINTENANCETYPE);){
+//                    
+//            List<MaintenanceType> types = new ArrayList<>();
+//            while(results.next()){
+//                MaintenanceType type = new MaintenanceType();
+//                type.setMainID(results.getString(COLUMN_MAINID));
+//                types.add(type);
+//                
+//            }
+//            
+//            types.get();
+//            
+//        return id;
+//        } catch (SQLException e) {
+//            System.out.println("Query failed: " + e.getMessage());
+//            return null;
+//        } 
+//    }
+//    
     public void updateTypes(String addedType) {
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statement = conn.createStatement();) {
             
             statement.executeQuery(String.format("INSERT INTO %s (Type) VALUES ('%s')", TABLE_MAINTENANCETYPE, addedType));
+            System.out.println("Add successful");
+        } catch (SQLException e) {
+            System.out.println("Query failed: " + e.getMessage());
+
+        } 
+ 
+    }
+    
+    public void addToLog (String miles, String date) {
+        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+            Statement statement = conn.createStatement();) {
+            
+            statement.executeQuery(String.format("INSERT INTO %s (Type) VALUES ('%s','%s')", TABLE_MAINTENANCELOG, miles,date));
             System.out.println("Add successful");
         } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());

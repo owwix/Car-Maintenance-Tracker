@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.collections.*;
+import javafx.beans.value.ObservableValue;
 
 /**
  *
@@ -27,7 +28,22 @@ public class FXMLDocumentController implements Initializable {
     private TextField addTypeField;
     
     @FXML
+    private TextField milesPerformedAtField;
+    
+    @FXML
+    private TextField datePerformedOnField;
+    
+    @FXML
     private ChoiceBox<String> typeChoiceBox;
+    
+    @FXML
+    private TableView<?> logtable;
+
+    @FXML
+    private TableColumn<?, ?> miles;
+
+    @FXML
+    private TableColumn<?, ?> date;
     
     @FXML
     private ChoiceBox<String> logChoiceBox;
@@ -36,6 +52,7 @@ public class FXMLDocumentController implements Initializable {
     private ChoiceBox<String> removeChoiceBox;
     
     ObservableList<String> types = FXCollections.observableArrayList(datasource.getMaintenanceTypesAsArray());
+
     
     
     @FXML
@@ -60,6 +77,15 @@ public class FXMLDocumentController implements Initializable {
         types.remove(field);
     }
     
+    @FXML
+    public void onLogButtonClicked(ActionEvent event) {
+        String milesField = milesPerformedAtField.getText();
+        String dateField = datePerformedOnField.getText();
+        datasource.addToLog(milesField, dateField);
+
+
+    }
+    
     private String typeArray[] = datasource.getMaintenanceTypesAsArray();
     
     @Override
@@ -71,6 +97,10 @@ public class FXMLDocumentController implements Initializable {
         logChoiceBox.setValue(typeArray[0]);
         removeChoiceBox.setItems(types);
         removeChoiceBox.setValue(typeArray[0]);
+        typeChoiceBox.getSelectionModel().selectedIndexProperty().addListener(
+            (ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
+                System.out.println(old_val);
+      });
     }  
     
     public ObservableList<String> getTypes() {
