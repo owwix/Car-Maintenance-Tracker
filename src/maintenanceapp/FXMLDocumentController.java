@@ -15,6 +15,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.collections.*;
 import javafx.beans.value.ObservableValue;
+import maintenanceapp.model.MaintenanceType;
+import maintenanceapp.model.MaintenanceLog;
 
 /**
  *
@@ -81,7 +83,13 @@ public class FXMLDocumentController implements Initializable {
     public void onLogButtonClicked(ActionEvent event) {
         String milesField = milesPerformedAtField.getText();
         String dateField = datePerformedOnField.getText();
-        datasource.addToLog(milesField, dateField);
+        String selectedID = logChoiceBox.getValue();
+        MaintenanceLog log = new MaintenanceLog();
+        log.setId(selectedID);
+        log.setDate(Integer.parseInt(dateField));
+        log.setMileage(Integer.parseInt(milesField));
+        datasource.addToLog(log);
+        
 
 
     }

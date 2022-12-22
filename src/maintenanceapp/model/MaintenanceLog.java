@@ -10,21 +10,21 @@ package maintenanceapp.model;
  */
 public class MaintenanceLog {
     
-    private int id;
+    private String id;
     private int mileage;
     private int date;
 
     /**
      * @return the id
      */
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

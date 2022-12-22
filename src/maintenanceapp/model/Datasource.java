@@ -123,11 +123,11 @@ public class Datasource {
  
     }
     
-    public void addToLog (String miles, String date) {
+    public void addToLog (MaintenanceLog log) {
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statement = conn.createStatement();) {
             
-            statement.executeQuery(String.format("INSERT INTO %s (Type) VALUES ('%s','%s')", TABLE_MAINTENANCELOG, miles,date));
+            statement.executeQuery(String.format("INSERT INTO %s (MainId, Date, Miles) VALUES ('%s','%s','%s')", TABLE_MAINTENANCELOG, log.getId(), log.getDate(),log.getMileage()));
             System.out.println("Add successful");
         } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
@@ -141,6 +141,7 @@ public class Datasource {
             Statement statement = conn.createStatement();) {
             
             statement.executeQuery(String.format("DELETE FROM %s WHERE Type='%s'", TABLE_MAINTENANCETYPE, removedType));
+            statement.executeQuery(String.format("DELETE FROM %s WHERE MainId='%s'", TABLE_MAINTENANCELOG, removedType));
             System.out.println("Remove successful");
         } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
@@ -157,4 +158,12 @@ public class Datasource {
         return count;
     }
     
+    public void updateLog() throws SQLException{
+        
+    }
+    
 }
+
+
+    
+
