@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
- */
 package maintenanceapp.controller;
 
 import maintenanceapp.model.Datasource;
@@ -12,19 +8,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Label;
 import javafx.collections.*;
 import javafx.beans.value.ObservableValue;
 import maintenanceapp.model.MaintenanceType;
 import maintenanceapp.model.MaintenanceLog;
 
-/**
- *
- * @author alexanderokonkwo
- */
 public class FXMLDocumentController implements Initializable {
     
     Datasource datasource = new Datasource();
+    private String typeArray[] = datasource.getMaintenanceTypesAsArray();
+    MaintenanceLog logArray[];
     
     @FXML
     private TextField addTypeField;
@@ -39,13 +34,13 @@ public class FXMLDocumentController implements Initializable {
     private ChoiceBox<String> typeChoiceBox;
     
     @FXML
-    private TableView<?> logtable;
+    private TableView<MaintenanceLog> logtable;
 
     @FXML
-    private TableColumn<?, ?> miles;
+    private TableColumn<MaintenanceLog, Integer> mileage;
 
     @FXML
-    private TableColumn<?, ?> date;
+    private TableColumn<MaintenanceLog, Integer> date;
     
     @FXML
     private ChoiceBox<String> logChoiceBox;
@@ -54,8 +49,9 @@ public class FXMLDocumentController implements Initializable {
     private ChoiceBox<String> removeChoiceBox;
     
     ObservableList<String> types = FXCollections.observableArrayList(datasource.getMaintenanceTypesAsArray());
-
     
+    ObservableList<MaintenanceLog> logbox;
+
     
     @FXML
     public void onAddButtonClicked(ActionEvent event) {
@@ -94,7 +90,12 @@ public class FXMLDocumentController implements Initializable {
 
     }
     
-    private String typeArray[] = datasource.getMaintenanceTypesAsArray();
+    public void updatedLogArray(String logMainId) {
+        logbox = FXCollections.observableArrayList(datasource.getLogAsArray(logMainId));
+        logArray = datasource.getLogAsArray(typeChoiceBox.getValue());
+
+    }
+   
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -105,10 +106,18 @@ public class FXMLDocumentController implements Initializable {
         logChoiceBox.setValue(typeArray[0]);
         removeChoiceBox.setItems(types);
         removeChoiceBox.setValue(typeArray[0]);
+        
+        // note for later: updatedLogArray implementation isnt working...maybe implement it in datasource?
+        updatedLogArray(typeChoiceBox.getValue());
+        mileage.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,Integer>("mileage"));
+        date.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,Integer>("date"));
+        logtable.setItems(logbox);
+        
         typeChoiceBox.getSelectionModel().selectedIndexProperty().addListener(
             (ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-                System.out.println(old_val);
+                // note for later: how do i retrieve choice box contents ?
       });
+        
     }  
     
     public ObservableList<String> getTypes() {

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML.java to edit this template
- */
 package maintenanceapp;
 
 import maintenanceapp.model.Datasource;
@@ -29,9 +25,6 @@ public class MaintenanceApp extends Application {
         stage.show();
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         Datasource datasource = new Datasource();
         if(!datasource.open()) {

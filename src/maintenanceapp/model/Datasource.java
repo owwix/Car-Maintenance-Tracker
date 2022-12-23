@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package maintenanceapp.model;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -11,10 +7,6 @@ import java.sql.Statement;
 import java.util.*;
 import java.time.format.DateTimeFormatter;
 
-/**
- *
- * @author alexanderokonkwo
- */
 public class Datasource {
     
     public static final String DB_NAME = "maintenance.db";
@@ -86,6 +78,35 @@ public class Datasource {
             System.out.println("Query failed: " + e.getMessage());
             return null;
         } 
+    }
+    
+    public MaintenanceLog[] getLogAsArray(String logMainId) {
+        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+            Statement statement = conn.createStatement();
+            ResultSet results = statement.executeQuery(String.format("SELECT (Miles,Date) FROM " + TABLE_MAINTENANCELOG + "WHERE MainId = %s",logMainId));){
+                   
+            List<MaintenanceLog> logs = new ArrayList<>();
+            while(results.next()){
+                MaintenanceLog log = new MaintenanceLog();
+                log.setMileage(Integer.parseInt(results.getString(COLUMN_TYPE)));
+                log.setDate(Integer.parseInt(results.getString(COLUMN_DATE)));
+                logs.add(log);
+                
+            }
+            
+            MaintenanceLog logsArray[];
+            logsArray = new MaintenanceLog[logs.size()];
+            for (int i = 0; i < logs.size(); i++){
+                logsArray[i] = logs.get(i);
+            }            
+            
+        return logsArray;
+        
+        } catch (SQLException e) {
+            System.out.println("Query failed: " + e.getMessage());
+            return null;
+        }
+        
     }
     
 //    public String getMaintenanceID(String maintenanceType) {
