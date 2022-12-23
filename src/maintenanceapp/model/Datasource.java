@@ -109,28 +109,6 @@ public class Datasource {
         
     }
     
-//    public String getMaintenanceID(String maintenanceType) {
-//        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-//            Statement statement = conn.createStatement();
-//            ResultSet results = statement.executeQuery("SELECT * FROM " + TABLE_MAINTENANCETYPE);){
-//                    
-//            List<MaintenanceType> types = new ArrayList<>();
-//            while(results.next()){
-//                MaintenanceType type = new MaintenanceType();
-//                type.setMainID(results.getString(COLUMN_MAINID));
-//                types.add(type);
-//                
-//            }
-//            
-//            types.get();
-//            
-//        return id;
-//        } catch (SQLException e) {
-//            System.out.println("Query failed: " + e.getMessage());
-//            return null;
-//        } 
-//    }
-//    
     public void updateTypes(String addedType) {
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statement = conn.createStatement();) {
