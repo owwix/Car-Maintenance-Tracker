@@ -83,12 +83,11 @@ public class Datasource {
     public MaintenanceLog[] getLogAsArray(String logMainId) {
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statement = conn.createStatement();
-            ResultSet results = statement.executeQuery(String.format("SELECT (Miles,Date) FROM " + TABLE_MAINTENANCELOG + "WHERE MainId = %s",logMainId));){
-                   
+            ResultSet results = statement.executeQuery(String.format("SELECT Miles,Date FROM " + TABLE_MAINTENANCELOG + " WHERE MainId='%s'",logMainId));){
             List<MaintenanceLog> logs = new ArrayList<>();
             while(results.next()){
                 MaintenanceLog log = new MaintenanceLog();
-                log.setMileage(Integer.parseInt(results.getString(COLUMN_TYPE)));
+                log.setMileage(Integer.parseInt(results.getString(COLUMN_MILES)));
                 log.setDate(Integer.parseInt(results.getString(COLUMN_DATE)));
                 logs.add(log);
                 
@@ -113,7 +112,7 @@ public class Datasource {
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statement = conn.createStatement();) {
             
-            statement.executeQuery(String.format("INSERT INTO %s (Type) VALUES ('%s')", TABLE_MAINTENANCETYPE, addedType));
+            statement.executeQuery(String.format("INSERT INTO %s Type VALUES ('%s')", TABLE_MAINTENANCETYPE, addedType));
             System.out.println("Add successful");
         } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());

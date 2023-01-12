@@ -5,6 +5,16 @@ public class MaintenanceLog {
     private String id;
     private Integer mileage;
     private Integer date;
+    
+    public MaintenanceLog(){
+        
+    }
+    
+    public MaintenanceLog(String id, int mileage, int date){
+        this.id = id;
+        this.mileage = mileage;
+        this.date = date;
+    }
 
     public String getId() {
         return id;

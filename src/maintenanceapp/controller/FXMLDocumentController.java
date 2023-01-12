@@ -34,13 +34,21 @@ public class FXMLDocumentController implements Initializable {
     private ChoiceBox<String> typeChoiceBox;
     
     @FXML
+    private ChoiceBox<String> testBox;
+    
+    @FXML
     private TableView<MaintenanceLog> logtable;
 
+//    @FXML
+//    private TableColumn<MaintenanceLog, Integer> mileage;
     @FXML
-    private TableColumn<MaintenanceLog, Integer> mileage;
+    TableColumn<MaintenanceLog,Integer> mileage = new TableColumn<MaintenanceLog,Integer>("mileage");
+    
+    @FXML
+    TableColumn<MaintenanceLog,Integer> date = new TableColumn<MaintenanceLog,Integer>("date");
 
-    @FXML
-    private TableColumn<MaintenanceLog, Integer> date;
+//    @FXML
+//    private TableColumn<MaintenanceLog, Integer> date;
     
     @FXML
     private ChoiceBox<String> logChoiceBox;
@@ -95,11 +103,24 @@ public class FXMLDocumentController implements Initializable {
         logArray = datasource.getLogAsArray(typeChoiceBox.getValue());
 
     }
+    
+    public void loadtable(){
+        refreshTable();
+        mileage.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,Integer>("mileage"));
+        date.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,Integer>("date"));
+        logtable.setItems(logbox);
+        System.out.println("Test");
+    }
+    
+    @FXML
+    private void refreshTable(){
+        logbox.clear();
+        logbox = FXCollections.observableArrayList(datasource.getLogAsArray(typeChoiceBox.getValue()));
+    }
    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
         typeChoiceBox.setItems(types);
         typeChoiceBox.setValue(typeArray[0]);
         logChoiceBox.setItems(types);
@@ -107,15 +128,14 @@ public class FXMLDocumentController implements Initializable {
         removeChoiceBox.setItems(types);
         removeChoiceBox.setValue(typeArray[0]);
         
-        // note for later: updatedLogArray implementation isnt working...maybe implement it in datasource?
         updatedLogArray(typeChoiceBox.getValue());
-        mileage.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,Integer>("mileage"));
-        date.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,Integer>("date"));
-        logtable.setItems(logbox);
+        loadtable();
         
         typeChoiceBox.getSelectionModel().selectedIndexProperty().addListener(
             (ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-                // note for later: how do i retrieve choice box contents ?
+                refreshTable();
+                logtable.setItems(logbox);
+                
       });
         
     }  
