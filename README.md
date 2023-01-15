@@ -6,5 +6,6 @@ SceneBuilder is used to generate XML for interface.
 Java and Sqlite3 are used for backend/database processes.
 A work in progress.
 
-<img width="604" alt="Screen Shot 2022-12-22 at 1 14 03 PM" src="https://user-images.githubusercontent.com/53359125/209227043-3750e85d-5d26-4c0b-8083-9cff306057c3.png">
-<img width="604" alt="Screen Shot 2022-12-22 at 1 14 25 PM" src="https://user-images.githubusercontent.com/53359125/209227082-693f99e0-af4c-49fe-a70d-cf450e2cc986.png">
+<img width="602" alt="Screen Shot 2023-01-14 at 8 12 15 PM" src="https://user-images.githubusercontent.com/53359125/212522555-669f3fe1-b022-47f7-9492-fcd9eeb072ca.png">
+<img width="602" alt="Screen Shot 2023-01-14 at 8 12 32 PM" src="https://user-images.githubusercontent.com/53359125/212522566-470ecfa7-6c94-4ad6-9d6c-7e0aa34c937e.png">
+
