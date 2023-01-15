@@ -9,17 +9,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.Label;
 import javafx.collections.*;
-import javafx.beans.value.ObservableValue;
-import maintenanceapp.model.MaintenanceType;
 import maintenanceapp.model.MaintenanceLog;
 
 public class FXMLDocumentController implements Initializable {
     
     Datasource datasource = new Datasource();
-    private String typeArray[] = datasource.getMaintenanceTypesAsArray();
-    MaintenanceLog logArray[];
+    final private String typeArray[] = datasource.getMaintenanceTypesAsArray();
     
     @FXML
     private TextField addTypeField;
@@ -123,7 +119,6 @@ public class FXMLDocumentController implements Initializable {
         
     }
    
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         typeChoiceBox.setItems(types);
@@ -137,12 +132,4 @@ public class FXMLDocumentController implements Initializable {
             
     }  
     
-    public ObservableList<String> getTypes() {
-        return types;
-    }
-    
-    public void setTypes(ObservableList<String> types) {
-        this.types=types;
-    }
 }
-

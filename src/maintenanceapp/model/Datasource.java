@@ -22,13 +22,13 @@ public class Datasource {
     public static final String COLUMN_TYPE = "Type";
     public static final String COLUMN_MAINID = "MainId";
     
-    private DateTimeFormatter formatter;
-    
+//    private DateTimeFormatter formatter;
+//    
     private Connection conn;
     
-    public Datasource() {
-        formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-    }
+//    public Datasource() {
+//        formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//    }
     
     public boolean open(){
         try {
@@ -112,7 +112,7 @@ public class Datasource {
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statement = conn.createStatement();) {
             
-            statement.executeQuery(String.format("INSERT INTO %s Type VALUES ('%s')", TABLE_MAINTENANCETYPE, addedType));
+            statement.executeQuery(String.format("INSERT INTO %s (Type) VALUES ('%s')", TABLE_MAINTENANCETYPE, addedType));
             System.out.println("Add successful");
         } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
@@ -137,14 +137,21 @@ public class Datasource {
     public void removeTypes(String removedType) {
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statement = conn.createStatement();) {
-            
             statement.executeQuery(String.format("DELETE FROM %s WHERE Type='%s'", TABLE_MAINTENANCETYPE, removedType));
-            statement.executeQuery(String.format("DELETE FROM %s WHERE MainId='%s'", TABLE_MAINTENANCELOG, removedType));
             System.out.println("Remove successful");
         } catch (SQLException e) {
             System.out.println("Query failed: " + e.getMessage());
 
         } 
+        
+        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+            Statement statement = conn.createStatement();) {
+            statement.executeQuery(String.format("DELETE FROM %s WHERE MainId='%s'", TABLE_MAINTENANCELOG, removedType));
+            System.out.println("Remove successful");
+        } catch (SQLException e) {
+            System.out.println("Query failed: " + e.getMessage());
+
+        }
     }
     
     public int getNumOfTypes() throws SQLException{
@@ -154,14 +161,5 @@ public class Datasource {
         rs.next();
         int count = rs.getInt(1);
         return count;
-    }
-    
-    public void updateLog() throws SQLException{
-        
-    }
-    
+    }  
 }
-
-
-    
-
