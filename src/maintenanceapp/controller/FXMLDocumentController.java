@@ -34,27 +34,21 @@ public class FXMLDocumentController implements Initializable {
     private ChoiceBox<String> typeChoiceBox;
     
     @FXML
-    private ChoiceBox<String> testBox;
-    
-    @FXML
     private TableView<MaintenanceLog> logtable;
 
-//    @FXML
-//    private TableColumn<MaintenanceLog, Integer> mileage;
     @FXML
-    TableColumn<MaintenanceLog,Integer> mileage = new TableColumn<MaintenanceLog,Integer>("mileage");
+    TableColumn<MaintenanceLog,Integer> miles = new TableColumn<MaintenanceLog,Integer>("miles");
     
     @FXML
     TableColumn<MaintenanceLog,Integer> date = new TableColumn<MaintenanceLog,Integer>("date");
-
-//    @FXML
-//    private TableColumn<MaintenanceLog, Integer> date;
     
     @FXML
     private ChoiceBox<String> logChoiceBox;
     
     @FXML
     private ChoiceBox<String> removeChoiceBox;
+    
+    private String typeChoiceBoxState;
     
     ObservableList<String> types = FXCollections.observableArrayList(datasource.getMaintenanceTypesAsArray());
     
@@ -84,6 +78,14 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML
+    public void onViewButtonClicked(ActionEvent event) {
+        typeChoiceBoxState = typeChoiceBox.getValue();
+        refreshTable();
+        logtable.setItems(logbox);
+        
+    }
+    
+    @FXML
     public void onLogButtonClicked(ActionEvent event) {
         String milesField = milesPerformedAtField.getText();
         String dateField = datePerformedOnField.getText();
@@ -94,28 +96,31 @@ public class FXMLDocumentController implements Initializable {
         log.setMileage(Integer.parseInt(milesField));
         datasource.addToLog(log);
         
+        typeChoiceBoxState = typeChoiceBox.getValue();
+        refreshTable();
+        logtable.setItems(logbox);
 
-
-    }
-    
-    public void updatedLogArray(String logMainId) {
-        logbox = FXCollections.observableArrayList(datasource.getLogAsArray(logMainId));
-        logArray = datasource.getLogAsArray(typeChoiceBox.getValue());
 
     }
     
     public void loadtable(){
         refreshTable();
-        mileage.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,Integer>("mileage"));
+        miles.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,Integer>("mileage"));
         date.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,Integer>("date"));
         logtable.setItems(logbox);
-        System.out.println("Test");
     }
     
     @FXML
     private void refreshTable(){
-        logbox.clear();
-        logbox = FXCollections.observableArrayList(datasource.getLogAsArray(typeChoiceBox.getValue()));
+        typeChoiceBoxState = typeChoiceBox.getValue();
+        try {
+            logbox.clear();
+        } catch(NullPointerException e){
+            System.out.println("Observable List is empty");
+        }
+
+        logbox = FXCollections.observableArrayList(datasource.getLogAsArray(typeChoiceBoxState));
+        
     }
    
     
@@ -128,16 +133,8 @@ public class FXMLDocumentController implements Initializable {
         removeChoiceBox.setItems(types);
         removeChoiceBox.setValue(typeArray[0]);
         
-        updatedLogArray(typeChoiceBox.getValue());
         loadtable();
-        
-        typeChoiceBox.getSelectionModel().selectedIndexProperty().addListener(
-            (ObservableValue<? extends Number> ov, Number old_val, Number new_val) -> {
-                refreshTable();
-                logtable.setItems(logbox);
-                
-      });
-        
+            
     }  
     
     public ObservableList<String> getTypes() {
@@ -148,3 +145,4 @@ public class FXMLDocumentController implements Initializable {
         this.types=types;
     }
 }
+
