@@ -21,14 +21,8 @@ public class Datasource {
     public static final String TABLE_MAINTENANCETYPE = "MaintenanceType";
     public static final String COLUMN_TYPE = "Type";
     public static final String COLUMN_MAINID = "MainId";
-    
-//    private DateTimeFormatter formatter;
-//    
+       
     private Connection conn;
-    
-//    public Datasource() {
-//        formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//    }
     
     public boolean open(){
         try {
@@ -88,7 +82,7 @@ public class Datasource {
             while(results.next()){
                 MaintenanceLog log = new MaintenanceLog();
                 log.setMileage(Integer.parseInt(results.getString(COLUMN_MILES)));
-                log.setDate(Integer.parseInt(results.getString(COLUMN_DATE)));
+                log.setDate(results.getString(COLUMN_DATE));
                 logs.add(log);
                 
             }

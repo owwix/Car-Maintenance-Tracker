@@ -3,6 +3,7 @@ package maintenanceapp.controller;
 import maintenanceapp.model.Datasource;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,7 +37,7 @@ public class FXMLDocumentController implements Initializable {
     TableColumn<MaintenanceLog,Integer> miles = new TableColumn<MaintenanceLog,Integer>("miles");
     
     @FXML
-    TableColumn<MaintenanceLog,Integer> date = new TableColumn<MaintenanceLog,Integer>("date");
+    TableColumn<MaintenanceLog,String> date = new TableColumn<MaintenanceLog,String>("date");
     
     @FXML
     private ChoiceBox<String> logChoiceBox;
@@ -49,6 +50,15 @@ public class FXMLDocumentController implements Initializable {
     ObservableList<String> types = FXCollections.observableArrayList(datasource.getMaintenanceTypesAsArray());
     
     ObservableList<MaintenanceLog> logbox;
+    
+//    @FXML
+//    void confirmLogDialog(ActionEvent event) {
+//        Alert alert = new Alert(Alert.AlertType.ERROR);
+//        alert.setTitle("Confirmation");
+//        alert.setContentText("Are you sure you want to log this?");
+//        Optional<ButtonType> result = alert.showAndWait();
+//        
+//    }
 
     
     @FXML
@@ -83,26 +93,34 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     public void onLogButtonClicked(ActionEvent event) {
-        String milesField = milesPerformedAtField.getText();
-        String dateField = datePerformedOnField.getText();
-        String selectedID = logChoiceBox.getValue();
-        MaintenanceLog log = new MaintenanceLog();
-        log.setId(selectedID);
-        log.setDate(Integer.parseInt(dateField));
-        log.setMileage(Integer.parseInt(milesField));
-        datasource.addToLog(log);
         
-        typeChoiceBoxState = typeChoiceBox.getValue();
-        refreshTable();
-        logtable.setItems(logbox);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setContentText("Are you sure you want to log this?");
+        Optional<ButtonType> result = alert.showAndWait();
+        
+        if (result.get() == ButtonType.OK) {
+            
+            String milesField = milesPerformedAtField.getText();
+            String dateField = datePerformedOnField.getText();
+            String selectedID = logChoiceBox.getValue();
+            MaintenanceLog log = new MaintenanceLog();
+            log.setId(selectedID);
+            log.setDate(dateField);
+            log.setMileage(Integer.parseInt(milesField));
+            datasource.addToLog(log);
 
-
+            typeChoiceBoxState = typeChoiceBox.getValue();
+            refreshTable();
+            logtable.setItems(logbox);
+            
+        }
     }
     
     public void loadtable(){
         refreshTable();
         miles.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,Integer>("mileage"));
-        date.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,Integer>("date"));
+        date.setCellValueFactory(new PropertyValueFactory<MaintenanceLog,String>("date"));
         logtable.setItems(logbox);
     }
     

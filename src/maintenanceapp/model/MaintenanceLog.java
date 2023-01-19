@@ -4,13 +4,13 @@ public class MaintenanceLog {
     
     private String id;
     private Integer mileage;
-    private Integer date;
+    private String date;
     
     public MaintenanceLog(){
         
     }
     
-    public MaintenanceLog(String id, int mileage, int date){
+    public MaintenanceLog(String id, int mileage, String date){
         this.id = id;
         this.mileage = mileage;
         this.date = date;
@@ -33,11 +33,11 @@ public class MaintenanceLog {
         this.mileage = mileage;
     }
 
-    public int getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(int date) {
+    public void setDate(String date) {
         this.date = date;
     }
     
